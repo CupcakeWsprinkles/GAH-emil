@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HAPPY BDAY EMIL</title>
+  
+  <!-- Google Fonts für die Bubbly Font & Retro-Look (korrigierte URLs) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=VT323&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      min-height: 100dvh;
+      background-color: #5c0a1e; /* Weinrot */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* Computer-Window Design */
+    .window {
+      background-color: #0d0d0d;
+      border: 3px solid #ffffff;
+      box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.65);
+      width: 100%;
+      max-width: 460px;
+      border-radius: 6px;
+      overflow: hidden;
+      animation: popIn 0.2s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Obere Fensterleiste */
+    .title-bar {
+      background-color: #ffffff;
+      color: #0d0d0d;
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      user-select: none;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .control-box {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #0d0d0d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    /* Fensterinhalt */
+    .window-content {
+      padding: 28px 22px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .message-text {
+      font-size: 1.45rem;
+      line-height: 1.4;
+      font-weight: 700;
+      margin: 0;
+      word-wrap: break-word;
+    }
+
+    .final-text {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      font-weight: 500;
+      text-align: left;
+    }
+
+    /* Buttons / Optionen */
+    .options-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .btn {
+      background-color: #0d0d0d;
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      padding: 12px 18px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: transform 0.1s, background-color 0.15s, color 0.15s;
+      flex: 1 1 auto;
+      min-width: 110px;
+      touch-action: manipulation;
+    }
+
+    .btn:active:not(.disabled) {
+      transform: scale(0.96);
+      background-color: #ffffff;
+      color: #0d0d0d;
+    }
+
+    @media (hover: hover) {
+      .btn:hover:not(.disabled) {
+        background-color: #ffffff;
+        color: #0d0d0d;
+      }
+    }
+
+    /* Nicht-klickbare Optionen */
+    .btn.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+      border-style: dashed;
+    }
+
+    /* GIF-Overlay in der Mitte vom Screen (Route 1,21) */
+    .gif-stage {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .gif-stage img {
+      max-width: 240px;
+      max-height: 240px;
+      border: 3px solid #ffffff;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .gif-btn {
+      flex: 0 0 auto;
+      min-width: auto;
+      padding: 12px 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app"></div>
+
+  <script>
+    // Merkt sich, ob "AAAAAA" in Schritt 1,2 deaktiviert wurde
+    let disableAaaaaa = false;
+
+    // Alle Schritte und Verzweigungen
+    const steps = {
+      start: {
+        title: "emil_bday.exe",
+        text: "HAPPY BDAY EMIL",
+        options: [
+          { label: "WOAH hi.", next: "sup" }
+        ]
+      },
+      sup: {
+        title: "msg.exe",
+        text: "sup.",
+        options: [
+          { label: "sup.", next: "excited_bday" }
+        ]
+      },
+      excited_bday: {
+        title: "question_01.exe",
+        text: "Are u excited about ur bday?",
+        options: [
+          { label: "YESYES", next: "grow_cm" },
+          { label: "no", disabled: true }
+        ]
+      },
+      grow_cm: {
+        title: "height_check.exe",
+        text: "Are u excited to finally grow a cm?",
+        options: [
+          { label: "yes im one cm Closer to reaching ur height (impossible)", next: "prefetus" },
+          { label: "im taller", disabled: true }
+        ]
+      },
+      prefetus: {
+        title: "age_update.exe",
+        text: "Happy abt turning from pre-fetus to newborn?",
+        options: [
+          { label: "yep im just a bebeh i", next: "route_1_1" },
+          { label: "LET ME DECIDE OML", next: "route_1_2" }
+        ]
+      },
+
+      // --- WEG 1,1 ---
+      route_1_1: {
+        title: "cute.exe",
+        text: "Gah right so cute.",
+        options: [
+          { label: "right.", next: "route_1_11" },
+          { label: "tight.", next: "route_1_12" }
+        ]
+      },
+
+      // --- WEG 1,11 ---
+      route_1_11: {
+        title: "rps_game.exe",
+        text: "lets Play rock paper or scissors. Ready?",
+        options: [
+          { label: "ROCK", next: "route_1_111" },
+          { label: "PAPER", next: "route_1_111" },
+          { label: "or ahhah", next: "route_1_112" },
+          { label: "SCISSORS", next: "route_1_111" }
+        ]
+      },
+      route_1_111: {
+        title: "game_over.exe",
+        text: "U lost!!!!hahahahcoughcoUGHGZG",
+        options: [
+          { label: "bad ending: i choked. redo.", next: "route_1_11" }
+        ]
+      },
+      route_1_112: {
+        title: "winner.exe",
+        text: "U won!!!! go to the end of the link.",
+        options: [
+          { label: "goes", next: "route_2_0" },
+          { label: "fights u???", next: "route_1_1121" }
+        ]
+      },
+      route_1_1121: {
+        title: "battle_lost.exe",
+        text: "u lost the fight. redo or spend 55 gems??",
+        options: [
+          { label: "redoes", next: "route_1_112" },
+          { label: "spend (too poor sry xx)", disabled: true }
+        ]
+      },
+
+      // --- WEG 1,12 ---
+      route_1_12: {
+        title: "typo_alert.exe",
+        text: "BYE DONT CHOOSE THE TYPO???",
+        options: [
+          { label: "THEN DONT MAKE IT AN OPTION", next: "route_1_2" },
+          { label: "im tight tho i", next: "route_1_122" }
+        ]
+      },
+      route_1_122: {
+        title: "apology.exe",
+        text: "oh oh my god no im so sorry yeah no i completely understand.",
+        options: [
+          { label: "tanks", next: "route_1_122_next" }
+        ]
+      },
+      route_1_122_next: {
+        title: "redirect.exe",
+        text: "anyway i",
+        options: [
+          { label: "bring me to the end of this link", next: "route_2_0" }
+        ]
+      },
+
+      // --- WEG 1,2 ---
+      route_1_2: {
+        title: "warning.exe",
+        text: "LEAVE ME ALONE THIS IS MY WEBSITE",
+        getOptions: () => [
+          { label: "NO THIS SUCKS", next: "route_1_21" },
+          { label: "AAAAAA", next: "route_1_22", disabled: disableAaaaaa }
+        ]
+      },
+      route_1_21: {
+        title: "watch_this.exe",
+        text: "NO IT DOESNT watch this",
+        options: [
+          { label: "??", next: "route_1_21_gif" }
+        ]
+      },
+      route_1_21_gif: {
+        isGifScreen: true,
+        // HIER DEN DATEINAMEN DEINES GIFS EINTRAGEN:
+        gifSrc: "dein-bild.gif"
+      },
+      route_1_22: {
+        title: "shhh.exe",
+        text: "STOP SCREAMING go back to the other option.",
+        options: [
+          {
+            label: "ok sorry.",
+            action: () => {
+              disableAaaaaa = true;
+              render("route_1_2");
+            }
+          }
+        ]
+      },
+
+      // --- ENDE 2,0 ---
+      route_2_0: {
+        title: "for_emil.txt",
+        isFinal: true,
+        text: "deer Emil, i wish u a great super duper birthday. youre so awesome and kind and funni and aura and stuff and im realli happi that we know each other. today is ur special day and i hope u celebrate it well !!!! i wish i could give u an actual gift not a digital thing i coded :sob: but i hope u like this too ! you is kind you is important and sososoosososososo cool."
+      }
+    };
+
+    const app = document.getElementById("app");
+
+    function render(stepKey) {
+      const step = steps[stepKey];
+      app.innerHTML = "";
+
+      // Spezialansicht für das GIF in der Bildschirmmitte (Route 1,21)
+      if (step.isGifScreen) {
+        const stage = document.createElement("div");
+        stage.className = "gif-stage";
+
+        const img = document.createElement("img");
+        img.src = step.gifSrc;
+        img.alt = "GIF";
+
+        const btn = document.createElement("button");
+        btn.className = "btn gif-btn";
+        btn.textContent = "?!?!";
+        btn.onclick = () => render("route_2_0");
+
+        stage.appendChild(img);
+        stage.appendChild(btn);
+        app.appendChild(stage);
+        return;
+      }
+
+      // Standard Computer-Window erstellen
+      const win = document.createElement("div");
+      win.className = "window";
+
+      const titleBar = document.createElement("div");
+      titleBar.className = "title-bar";
+      titleBar.innerHTML = `
+        <span>${step.title || "system.exe"}</span>
